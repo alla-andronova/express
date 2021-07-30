@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+  <%- include("../partials/head") %>
+  <body>
+    <%- include("../partials/navigation") %> 
+    
+    <%if (isAdded) {%> <p>The student is added</p> <%}%>
+    <%if (!isAdded) {%> <p>    <form action="/students/create" method="POST">
+      <div>
+        NAME
+        <input name="name" type="text" />
+      </div>
+      <div>
+        SURNAME
+        <input name="surname" type="text" />
+      </div>
+      <div>
+        AGE
+        <input name="age" type="number" />
+      </div>
+      <div>
+        EMAIL
+        <input name="email" type="text" />
+      </div>
+      <div>
+        GENDER
+        <select name="gender">
+          <option value="male">male</option>
+          <option value="female">female</option>
+        </select>
+      </div>
+
+      <button type="submit">Add Student</button>
+    </form></p> <%}%>
+
+
+  </body>
+</html>
