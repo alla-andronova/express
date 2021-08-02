@@ -1,28 +1,27 @@
-const Grades = require("../models/Grades");
+const Grades = require('../models/Grades');
 
 class GradesController {
-  // used for students list and individual student page
-
-  // used for rendering create student form
   renderGradesForm(req, res) {
     // console.log("render form");
-    res.render("pages/gradesForm", { isAdded: false });
+    res.render('pages/gradesForm');
   }
-  // used for POST request from the form, and adding new student
+
   async createGrade(req, res) {
-    const student = await Grades.getBySurname(req.body.surname);
-    if (student) {
-      res.write(`You have filled already your grade was ${student.grade}`);
+    try {
+      const student = await Grades.getBySurname(req.body.surname);
+      if (student) {
+        res.write(`You have filled already your grade was ${student.grade}`);
+        res.end();
+        return;
+      }
+
+      await Grades.createGrade(req.body);
+
+      res.write(`Your grade is ${req.body.totalGrades}`);
       res.end();
-      return;
+    } catch (err) {
+      throw err;
     }
-
-    await Grades.createGrade(req.body);
-
-    // return the same form
-
-    res.write(`Your grade is ${req.body.totalGrades}`);
-    res.end();
   }
 }
 

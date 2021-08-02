@@ -8,7 +8,8 @@
 
     <h1>questions</h1>
     
-    <form action="/students/gradesForm" method="POST" id="form">
+
+    <form  id="form">
        <p>
           <label for="name">name:</label>
           <input type="text" name="name" id="name" />
@@ -66,7 +67,9 @@
         }
 
         //при сабмите отправляем на бек фио и оценка c помощью метода пост из jquery
+
         $.post(
+        //на какую url ссылку отправлять и мы испольуем метод пост из jquery потому что тут джаваскриптом вычисляются динамически реультат
           "/students/gradesForm",
           {
             name: document.getElementById("name").value,
