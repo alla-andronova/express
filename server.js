@@ -40,8 +40,9 @@ server.get('/', function (req, res) {
 server.get('/students', StudentsCtrl.main);
 server.get('/students/create', StudentsCtrl.renderForm);
 server.post('/students/create', StudentsCtrl.createStudent);
-server.get('/students/:studentId(\\d+)/', StudentsCtrl.main);
 server.get('/students/:studentId(\\d+)/delete', StudentsCtrl.deleteStudent);
+server.get('/students/:studentId(\\d+)/', StudentsCtrl.main);
+
 server.get('/students/gradesForm', GradesCtrl.renderGradesForm);
 server.post('/students/gradesForm', GradesCtrl.createGrade);
 

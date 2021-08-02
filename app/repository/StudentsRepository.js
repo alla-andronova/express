@@ -63,7 +63,7 @@ class StudentsRepository {
   deleteStudent(studentId) {
     return new Promise((resolve, reject) => {
       this._db.query(
-        `DELETE * FROM student where id_Student=?`,
+        `DELETE FROM student where id_Student=?`,
         [studentId],
         (error, elements) => {
           if (error) {
