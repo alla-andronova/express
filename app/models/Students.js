@@ -1,64 +1,25 @@
-const db = require('../../mysql-connection');
+const StudentsRepository = require('../repository/StudentsRepository');
 
 class Students {
-  constructor(db) {
-    this._db = db;
-  }
-
-  //оборачиваем в промис чтобы избежать колбека из за которого рендер был бы в модели
   getAll() {
-    return new Promise((resolve, reject) => {
-      this._db.query('SELECT * FROM student', (error, elements) => {
-        if (error) {
-          return reject(error);
-        }
-        return resolve(elements);
-      });
-    });
+    return StudentsRepository.findAll();
   }
 
   getById(id) {
-    return new Promise((resolve, reject) => {
-      this._db.query(
-        `SELECT * FROM student where id_Student=${id}`,
-        (error, elements) => {
-          if (error) {
-            return reject(error);
-          }
-          return resolve(elements.length === 0 ? null : elements[0]);
-        },
-      );
-    });
+    return StudentsRepository.findById(id);
   }
 
   getByEmail(email) {
-    return new Promise((resolve, reject) => {
-      this._db.query(
-        `SELECT * FROM student where email=?`,
-        [email],
-        (error, elements) => {
-          if (error) {
-            return reject(error);
-          }
-          return resolve(elements.length === 0 ? null : elements[0]);
-        },
-      );
-    });
+    return StudentsRepository.findByEmail(email);
   }
 
   createStudent(data) {
-    return new Promise((resolve, reject) => {
-      this._db.query(
-        `INSERT INTO student (name,surname,email,age,gender,faculty_id) VALUES ('${data.name}', '${data.surname}', '${data.email}', ${data.age},'${data.gender}', 2)`,
-        (error, result) => {
-          if (error) {
-            return reject(error);
-          }
-          return resolve(result);
-        },
-      );
-    });
+    return StudentsRepository.saveStudent(data);
+  }
+
+  deleteStudent(studentId) {
+    return StudentsRepository.deleteStudent(studentId);
   }
 }
 
-module.exports = new Students(db);
+module.exports = new Students();

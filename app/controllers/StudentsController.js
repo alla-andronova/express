@@ -44,6 +44,17 @@ class StudentsController {
       throw err;
     }
   }
+
+  async deleteStudent(req, res) {
+    const { studentId } = req.params;
+    try {
+      await Students.deleteStudent(studentId);
+
+      res.render('pages/deleteStudent');
+    } catch (err) {
+      throw err;
+    }
+  }
 }
 
 module.exports = StudentsController;
