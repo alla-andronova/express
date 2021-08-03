@@ -1,4 +1,5 @@
-const db = require("../../mysql-connection");
+const db = require('../../mysql-connection');
+const GradesModel = require('../models/GradesModel');
 
 class Grades {
   constructor(db) {
@@ -14,8 +15,12 @@ class Grades {
           if (error) {
             return reject(error);
           }
-          return resolve(elements.length === 0 ? null : elements[0]);
-        }
+          if (elements.length === 0) {
+            return resolve(null);
+          }
+          const { id, name, surname, grade } = elements[0];
+          return resolve(new GradesModel(id, name, surname, grade));
+        },
       );
     });
   }
@@ -24,14 +29,14 @@ class Grades {
     return new Promise((resolve, reject) => {
       this._db.query(
         `INSERT INTO grades (name,surname, grade) VALUES (?, ?, ?)`,
-        [data.name, data.surname, data.totalGrades],
+        [data.name, data.surname, data.grade],
         (error, result) => {
           if (error) {
             return reject(error);
           }
 
           return resolve(result);
-        }
+        },
       );
     });
   }

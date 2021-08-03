@@ -1,4 +1,5 @@
-const Grades = require('../models/Grades');
+const GradesModel = require('../models/GradesModel');
+const gradesRepository = require('../repository/GradesRepository');
 
 class GradesController {
   renderGradesForm(req, res) {
@@ -8,14 +9,17 @@ class GradesController {
 
   async createGrade(req, res) {
     try {
-      const student = await Grades.getBySurname(req.body.surname);
+      const student = await gradesRepository.getBySurname(req.body.surname);
       if (student) {
         res.write(`You have filled already your grade was ${student.grade}`);
         res.end();
         return;
       }
+      const { name, surname, totalGrades } = req.body;
 
-      await Grades.createGrade(req.body);
+      await gradesRepository.createGrade(
+        new GradesModel(null, name, surname, totalGrades),
+      );
 
       res.write(`Your grade is ${req.body.totalGrades}`);
       res.end();
