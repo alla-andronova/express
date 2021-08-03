@@ -7,6 +7,8 @@ class StudentModel {
     this.gender = gender;
     this.email = email;
   }
+
+  getUserName() {}
 }
 
 module.exports = StudentModel;
