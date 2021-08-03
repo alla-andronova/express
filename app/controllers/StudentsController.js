@@ -61,7 +61,7 @@ class StudentsController {
     try {
       await studentsRepository.deleteStudent(studentId);
 
-      res.render('pages/deleteStudent');
+      res.render('pages/deleteStudent', { studentId: studentId });
     } catch (err) {
       throw err;
     }
