@@ -8,8 +8,8 @@
     <ul>
       <% students.map(student => { %>
       <li>
-        <a href="/students/<%= student.id_Student %>">
-          <%= student.Name %> <%= student.Surname %>
+        <a href="/students/<%= student.id %>">
+          <%= student.name %> <%= student.surname %>
         </a>
       </li>
       <% }) %>

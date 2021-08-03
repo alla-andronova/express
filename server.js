@@ -2,11 +2,11 @@ const express = require('express');
 const path = require('path');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
-// const MainController = require("./app/controllers/MainController");
+
 const StudentsController = require('./app/controllers/StudentsController');
 const GradesController = require('./app/controllers/GradesController');
 
-const StudentsCtrl = new StudentsController();
+const studentsCtrl = new StudentsController();
 const GradesCtrl = new GradesController();
 
 const server = express();
@@ -37,11 +37,11 @@ server.get('/', function (req, res) {
   res.render('pages/index', { content: 'This is home' });
 });
 
-server.get('/students', StudentsCtrl.main);
-server.get('/students/create', StudentsCtrl.renderForm);
-server.post('/students/create', StudentsCtrl.createStudent);
-server.get('/students/:studentId(\\d+)/delete', StudentsCtrl.deleteStudent);
-server.get('/students/:studentId(\\d+)/', StudentsCtrl.main);
+server.get('/students', studentsCtrl.getAllStudents);
+server.get('/students/create', studentsCtrl.renderForm);
+server.post('/students/create', studentsCtrl.createStudent);
+server.get('/students/:studentId(\\d+)/delete', studentsCtrl.deleteStudent);
+server.get('/students/:studentId(\\d+)/', studentsCtrl.getStudentById);
 
 server.get('/students/gradesForm', GradesCtrl.renderGradesForm);
 server.post('/students/gradesForm', GradesCtrl.createGrade);

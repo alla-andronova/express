@@ -1,21 +1,29 @@
-const Students = require('../models/Students');
+//с маленькой буквы потому что экспортируем обькт
+
+const StudentModel = require('../models/StudentModel');
+const studentsRepository = require('../repository/StudentsRepository');
 
 class StudentsController {
-  async main(req, res) {
+  async getAllStudents(req, res) {
+    try {
+      const students = await studentsRepository.findAll();
+
+      res.render('pages/students', { students });
+      //в обьекте студент передаем обьект студента для ejs
+    } catch (err) {
+      throw err;
+    }
+  }
+
+  async getStudentById(req, res) {
     const { studentId } = req.params;
     try {
-      if (studentId) {
-        const student = await Students.getById(studentId);
+      const student = await studentsRepository.findById(studentId);
 
-        if (!student) {
-          res.render('pages/error');
-        } else {
-          res.render('pages/student', { student });
-        }
+      if (!student) {
+        res.render('pages/error');
       } else {
-        const students = await Students.getAll();
-        res.render('pages/students', { students });
-        //в обьекте студент передаем обьект студента для ejs
+        res.render('pages/student', { student });
       }
     } catch (err) {
       throw err;
@@ -23,20 +31,23 @@ class StudentsController {
   }
 
   renderForm(req, res) {
-    // console.log("render form");
     res.render('pages/addStudent', { isAdded: false });
   }
 
   async createStudent(req, res) {
     try {
-      const student = await Students.getByEmail(req.body.email);
+      const student = await studentsRepository.findByEmail(req.body.email);
       if (student) {
         res.write('There is a such email already');
         res.end();
         return;
       }
 
-      await Students.createStudent(req.body);
+      const { id, name, surname, age, gender, email } = req.body;
+
+      await studentsRepository.saveStudent(
+        new StudentModel(null, name, surname, age, gender, email),
+      );
       res.cookie('studentSurname', req.body.surname);
 
       res.render('pages/addStudent', { isAdded: true });
@@ -48,7 +59,7 @@ class StudentsController {
   async deleteStudent(req, res) {
     const { studentId } = req.params;
     try {
-      await Students.deleteStudent(studentId);
+      await studentsRepository.deleteStudent(studentId);
 
       res.render('pages/deleteStudent');
     } catch (err) {

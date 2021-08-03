@@ -1,18 +1,25 @@
 const db = require('../../mysql-connection');
+const StudentModel = require('../models/StudentModel');
 
 class StudentsRepository {
   constructor(db) {
     this._db = db;
   }
 
-  //оборачиваем в промис чтобы избежать колбека из за которого рендер был бы в модели
+  makeStudent(obj) {
+    const { id, name, surname, age, gender, email } = obj;
+    return new StudentModel(id, name, surname, age, gender, email);
+  }
+
   findAll() {
     return new Promise((resolve, reject) => {
       this._db.query('SELECT * FROM student', (error, elements) => {
         if (error) {
           return reject(error);
         }
-        return resolve(elements);
+
+        const students = elements.map(obj => this.makeStudent(obj));
+        return resolve(students);
       });
     });
   }
@@ -20,12 +27,16 @@ class StudentsRepository {
   findById(id) {
     return new Promise((resolve, reject) => {
       this._db.query(
-        `SELECT * FROM student where id_Student=${id}`,
+        `SELECT * FROM student where id= ? `,
+        [id],
         (error, elements) => {
           if (error) {
             return reject(error);
           }
-          return resolve(elements.length === 0 ? null : elements[0]);
+          if (elements.length === 0) {
+            return resolve(null);
+          }
+          return resolve(this.makeStudent(elements[0]));
         },
       );
     });
@@ -40,7 +51,10 @@ class StudentsRepository {
           if (error) {
             return reject(error);
           }
-          return resolve(elements.length === 0 ? null : elements[0]);
+          if (elements.length === 0) {
+            return resolve(null);
+          }
+          return resolve(this.makeStudent(elements[0]));
         },
       );
     });
@@ -63,7 +77,7 @@ class StudentsRepository {
   deleteStudent(studentId) {
     return new Promise((resolve, reject) => {
       this._db.query(
-        `DELETE FROM student where id_Student=?`,
+        `DELETE FROM student where id=?`,
         [studentId],
         (error, elements) => {
           if (error) {
