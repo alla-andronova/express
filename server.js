@@ -6,8 +6,10 @@ const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 
 const StudentsController = require('./app/controllers/StudentsController');
+const LoginController = require('./app/controllers/LoginController');
 const GradesController = require('./app/controllers/GradesController');
 
+const loginCtrl = new LoginController();
 const studentsCtrl = new StudentsController();
 const GradesCtrl = new GradesController();
 
@@ -39,10 +41,18 @@ server.get('/', function (req, res) {
   res.render('pages/index', { content: 'This is home' });
 });
 
+server.get('/login', loginCtrl.renderForm);
+server.post('/login', loginCtrl.handleLogin);
+
 server.get('/students', studentsCtrl.getAllStudents);
 server.get('/students/create', studentsCtrl.renderForm);
 server.post('/students/create', studentsCtrl.createStudent);
 server.get('/students/:studentId(\\d+)/delete', studentsCtrl.deleteStudent);
+server.get(
+  '/students/:studentId(\\d+)/update',
+  studentsCtrl.renderFormUpdateStudent,
+);
+server.post('/students/:studentId(\\d+)/update', studentsCtrl.updateStudent);
 server.get('/students/:studentId(\\d+)/', studentsCtrl.getStudentById);
 
 server.get('/students/gradesForm', GradesCtrl.renderGradesForm);

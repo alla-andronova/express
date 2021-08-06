@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+  <%- include("../partials/head") %>
+  <body>
+    <%- include("../partials/navigation") %>
+
+    <form action="/students/<%= student.id %>/update" method="POST">
+      <div>
+        NAME <br />
+        <input name="name" type="text" value="<%= student.name %>" />
+      </div>
+      <div>
+        SURNAME <br />
+        <input name="surname" type="text" value="<%= student.surname %>" />
+      </div>
+      <div>
+        AGE <br />
+        <input name="age" type="number" value="<%= student.age %>" />
+      </div>
+      <div>
+        EMAIL <br />
+        <input name="email" type="text" value="<%= student.email %>" />
+      </div>
+      <div>
+        GENDER <br />
+        <select name="gender">
+          <option value="male">male</option>
+          <option value="female">female</option>
+        </select>
+      </div>
+
+      <button type="submit">UPDATE Student</button>
+    </form>
+  </body>
+</html>

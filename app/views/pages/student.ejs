@@ -8,5 +8,15 @@
     <p>Surname:<%= student.surname %></p>
     <p>Email: <%= student.email %></p>
     <p>Age: <%= student.age %></p>
+    <div>
+      <button type="button" ">
+        <a href="/students/<%= student.id %>/update">update the student</a>
+      </button>
+      <button>
+        <a href="/students/<%= student.id %>/delete" "
+          >delete the student</a
+        >
+      </button>
+    </div>
   </body>
 </html>

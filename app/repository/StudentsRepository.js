@@ -7,8 +7,8 @@ class StudentsRepository {
   }
 
   makeStudent(obj) {
-    const { id, name, surname, age, gender, email } = obj;
-    return new StudentModel(id, name, surname, age, gender, email);
+    const { id, name, surname, age, gender, email, password } = obj;
+    return new StudentModel(id, name, surname, age, gender, email, password);
   }
 
   findAll() {
@@ -60,10 +60,23 @@ class StudentsRepository {
     });
   }
 
+  /**
+   *
+   * @param {StudentModel} data
+   */
   saveStudent(data) {
     return new Promise((resolve, reject) => {
       this._db.query(
-        `INSERT INTO student (name,surname,email,age,gender,faculty_id) VALUES ('${data.name}', '${data.surname}', '${data.email}', ${data.age},'${data.gender}', 2)`,
+        `INSERT INTO student (name,surname,email,age,gender,faculty_id,password) VALUES(?,?,?,?,?,?,?)`,
+        [
+          data.name,
+          data.surname,
+          data.email,
+          data.age,
+          data.gender,
+          2,
+          data.password,
+        ],
         (error, result) => {
           if (error) {
             return reject(error);

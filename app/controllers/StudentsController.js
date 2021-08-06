@@ -1,5 +1,5 @@
 //с маленькой буквы потому что экспортируем обькт
-
+const bcrypt = require('bcrypt');
 const StudentModel = require('../models/StudentModel');
 const studentsRepository = require('../repository/StudentsRepository');
 
@@ -34,6 +34,44 @@ class StudentsController {
     res.render('pages/addStudent', { isAdded: false });
   }
 
+  async renderFormUpdateStudent(req, res) {
+    const { studentId } = req.params;
+    try {
+      const student = await studentsRepository.findById(studentId);
+
+      if (!student) {
+        res.render('pages/error');
+      } else {
+        res.render('pages/updateStudent', { student });
+      }
+    } catch (err) {
+      throw err;
+    }
+  }
+
+  async updateStudent(req, res) {
+    const { studentId } = req.params;
+    try {
+      const student = await studentsRepository.findById(studentId);
+
+      if (!student) {
+        res.render('pages/error');
+      } else {
+        const { name, surname, age, gender, email } = req.body;
+        student.name = name;
+        student.surname = surname;
+        student.age = age;
+        student.gender = gender;
+        student.email = email;
+        await studentsRepository.saveStudent(student);
+
+        res.render('pages/updateStudent', { student });
+      }
+    } catch (err) {
+      throw err;
+    }
+  }
+
   async createStudent(req, res) {
     try {
       const student = await studentsRepository.findByEmail(req.body.email);
@@ -43,10 +81,20 @@ class StudentsController {
         return;
       }
 
-      const { id, name, surname, age, gender, email } = req.body;
+      const { name, surname, age, gender, email, password } = req.body;
+      //перед отправкой зашифровали пароль студента
+      const hashedPassword = bcrypt.hashSync(password, 10);
 
       await studentsRepository.saveStudent(
-        new StudentModel(null, name, surname, age, gender, email),
+        new StudentModel(
+          null,
+          name,
+          surname,
+          age,
+          gender,
+          email,
+          hashedPassword,
+        ),
       );
       res.cookie('studentSurname', req.body.surname);
 

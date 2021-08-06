@@ -7,27 +7,25 @@
     <%if (isAdded) {%> <p>The student is added</p> <%}%>
     <%if (!isAdded) {%> <p>    <form action="/students/create" method="POST">
       <div>
-        NAME
-        <input name="name" type="text" />
+        NAME <div><input name="name" type="text" /></div>
       </div>
       <div>
-        SURNAME
-        <input name="surname" type="text" />
+        SURNAME <div><input name="surname" type="text" /></div>
       </div>
       <div>
-        AGE
-        <input name="age" type="number" />
+        AGE <div><input name="age" type="number" /></div>
       </div>
       <div>
-        EMAIL
-        <input name="email" type="text" />
+        EMAIL <div><input name="email" type="text" />
+      </div></div>
+       <div>
+       Password <div><input name="password" type="password" /></div>
       </div>
       <div>
-        GENDER
-        <select name="gender">
+        GENDER <div><select name="gender">
           <option value="male">male</option>
           <option value="female">female</option>
-        </select>
+        </select></div>
       </div>
 
       <button type="submit">Add Student</button>
