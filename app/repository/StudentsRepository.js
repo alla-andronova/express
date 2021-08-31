@@ -87,6 +87,21 @@ class StudentsRepository {
     });
   }
 
+  updateStudent(data) {
+    return new Promise((resolve, reject) => {
+      this._db.query(
+        `UPDATE student SET name = ?, surname=?, email=?,age=?,gender=? WHERE id=?`,
+        [data.name, data.surname, data.email, data.age, data.gender, data.id],
+        (error, result) => {
+          if (error) {
+            return reject(error);
+          }
+          return resolve(result);
+        },
+      );
+    });
+  }
+
   deleteStudent(studentId) {
     return new Promise((resolve, reject) => {
       this._db.query(

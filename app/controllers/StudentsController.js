@@ -63,7 +63,7 @@ class StudentsController {
         student.age = age;
         student.gender = gender;
         student.email = email;
-        await studentsRepository.saveStudent(student);
+        await studentsRepository.updateStudent(student);
 
         res.render('pages/updateStudent', { student });
       }
